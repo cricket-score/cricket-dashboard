@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.data/
+*.tsbuildinfo
+playwright-report/
+test-results/
+.pages-build/
+out/
+.tools/
+supabase/functions/score-match/scoring.generated.ts
+supabase/.temp/
+supabase/.branches/
+.DS_Store

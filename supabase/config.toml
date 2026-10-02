@@ -1,0 +1,6 @@
+project_id = "school-cricket-live"
+
+[functions.score-match]
+# The handler verifies the Supabase Auth token and scorer app_metadata itself.
+verify_jwt = false
+entrypoint = "./functions/score-match/index.ts"
