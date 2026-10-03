@@ -1,7 +1,7 @@
 import { z } from 'zod';
 const id = z.string().min(1).max(80);
 const name = z.string().trim().min(1).max(80);
-const logo = z.string().max(100000).refine(v => !v || /^https:\/\//.test(v) || /^data:image\/(png|jpeg|webp);base64,/.test(v), 'Use an HTTPS image URL or PNG/JPEG/WebP upload');
+const logo = z.string().max(100000).refine(v => !v || /^https:\/\//.test(v) || /^\/images\//.test(v) || /^data:image\/(png|jpeg|webp);base64,/.test(v), 'Use an HTTPS image URL, local image, or PNG/JPEG/WebP upload');
 export const configSchema = z.object({
   event: name, title: name, venue: name, date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), overs: z.number().int().min(1).max(20), logo,
   teams: z.tuple([z.object({id, name, color: z.string().regex(/^#[0-9a-f]{6}$/i), logo, players: z.array(z.object({id,name})).length(11)}), z.object({id,name,color:z.string().regex(/^#[0-9a-f]{6}$/i),logo,players:z.array(z.object({id,name})).length(11)})]),
@@ -38,5 +38,7 @@ export const overs = (balls:number) => `${Math.floor(balls/6)}.${balls%6}`;
 export const rate = (runs:number,balls:number) => balls ? (runs*6/balls).toFixed(2) : '0.00';
 export const playerName = (c:Config,id:string) => c.teams.flatMap(t=>t.players).find(p=>p.id===id)?.name ?? '—';
 export function defaultMatch():Match {
-  return {config:{event:'The School Cricket Festival',title:'The Friendship Trophy',venue:'School Cricket Ground',date:'2026-10-02',overs:20,logo:'',teams:[{id:'blue',name:'Blue House',color:'#2463eb',logo:'',players:Array.from({length:11},(_,i)=>({id:`blue-${i+1}`,name:`Blue Player ${i+1}`}))},{id:'red',name:'Red House',color:'#dc554b',logo:'',players:Array.from({length:11},(_,i)=>({id:`red-${i+1}`,name:`Red Player ${i+1}`}))}],tossWinner:'blue',tossDecision:'bat',freeHit:true},events:[]};
+  const worldXI=['Senitha','Senithu','Ometh','Yewin','Vinuja','Kaveesha','Naveesha','Manthusha','Rusiru','Hirusha','Kumidu'];
+  const asianXI=['Wethum','Netharu','Kemitha','Sayul','Ranuja','Kumidu','Gayuka','Sanuth','Sithuja','Dinuja','Raheel'];
+  return {config:{event:'The School Cricket Festival',title:'The Friendship Trophy',venue:'School Cricket Ground',date:'2026-10-02',overs:20,logo:'',teams:[{id:'blue',name:'World XI',color:'#2463eb',logo:'/images/world-xi.jpeg',players:worldXI.map((name,i)=>({id:`blue-${i+1}`,name}))},{id:'red',name:'Asian XI',color:'#dc554b',logo:'/images/asian-xi.jpeg',players:asianXI.map((name,i)=>({id:`red-${i+1}`,name}))}],tossWinner:'blue',tossDecision:'bat',freeHit:true},events:[]};
 }
